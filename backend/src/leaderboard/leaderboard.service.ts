@@ -10,6 +10,13 @@ import type {
 
 const RANGES: Range[] = ['week', 'month', 'all'];
 
+// How many live ticks make up a simulated "day" before today's earnings roll into
+// history and a fresh (empty) day opens up. Without this, a long-running server
+// keeps piling every tick onto the same last array slot forever, so "today" grows
+// to dwarf the other 6 days for everyone and every sparkline converges on the same
+// flat-then-spike shape.
+const TICKS_PER_DAY = 40;
+
 @Injectable()
 export class LeaderboardService {
   private readonly participants: Participant[] = generateParticipants();
@@ -18,6 +25,7 @@ export class LeaderboardService {
     month: new Map(),
     all: new Map(),
   };
+  private ticksSinceRollover = 0;
 
   constructor() {
     // Seed previousRanks so the very first response has sensible (flat) deltas.
@@ -86,19 +94,38 @@ export class LeaderboardService {
     return result;
   }
 
+  /** Shifts every participant's 30-day window forward by one day, opening a fresh "today". */
+  private rolloverDay() {
+    for (const p of this.participants) {
+      p.priorEarnings += p.dailyEarnings.shift() ?? 0;
+      p.dailyEarnings.push(0);
+
+      let streak = 0;
+      for (let d = p.dailyEarnings.length - 1; d >= 0; d--) {
+        if (p.dailyEarnings[d] > 0) streak++;
+        else break;
+      }
+      p.streakDays = streak;
+    }
+  }
+
   /** Advances the world by one tick: a few random participants earn a bit more, then re-rank. */
   tick(): { ranges: Record<Range, LeaderboardEntry[]>; event: EarningEvent | null } {
+    this.ticksSinceRollover++;
+    if (this.ticksSinceRollover >= TICKS_PER_DAY) {
+      this.rolloverDay();
+      this.ticksSinceRollover = 0;
+    }
+
     const bumpCount = 1 + Math.floor(Math.random() * 3);
     let lastEvent: EarningEvent | null = null;
 
     for (let i = 0; i < bumpCount; i++) {
       const target = this.participants[Math.floor(Math.random() * this.participants.length)];
-      const skillish = Math.max(1, target.dailyEarnings.slice(-7).reduce((a, b) => a + b, 0) / 7);
-      const amount = Math.max(40, Math.round((Math.random() * 1.8 + 0.2) * skillish * 0.6));
+      const recentAvg = Math.max(1, target.dailyEarnings.slice(-7).reduce((a, b) => a + b, 0) / 7);
+      const amount = Math.max(40, Math.round((Math.random() * 1.8 + 0.2) * recentAvg * 0.6));
       target.dailyEarnings[target.dailyEarnings.length - 1] += amount;
-      if (target.dailyEarnings[target.dailyEarnings.length - 1] > 0) {
-        target.streakDays = Math.max(target.streakDays, 1);
-      }
+      target.streakDays = Math.max(target.streakDays, 1);
       lastEvent = {
         id: target.id,
         name: target.name,
