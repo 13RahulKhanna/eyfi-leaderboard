@@ -15,53 +15,59 @@ export function Header({
   activeEarners: number;
 }) {
   return (
-    <header className="relative overflow-hidden border-b border-surface-border">
-      <div className="noise-overlay pointer-events-none absolute inset-0 opacity-40" />
-      <div
-        className="pointer-events-none absolute -top-32 left-1/2 h-64 w-[36rem] -translate-x-1/2 rounded-full opacity-25 blur-3xl"
-        style={{ background: "radial-gradient(closest-side, var(--lime), transparent)" }}
-      />
-
-      <div className="relative mx-auto flex max-w-5xl flex-col gap-6 px-4 pb-6 pt-5 sm:px-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="font-display text-lg font-extrabold tracking-tight">
-              EY<span className="text-lime">FI</span>
-            </span>
-            <span className="hidden text-xs text-muted sm:inline">Earn Your First Income</span>
-            <span className="rounded-full border border-orange/30 bg-orange/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-orange">
-              Wave 01 · Leaderboard
-            </span>
-          </div>
-          <div className="w-full sm:w-auto sm:min-w-[22rem]">
-            <LiveTicker event={event} tick={tick} connected={connected} />
-          </div>
+    <header className="border-b border-surface-border">
+      <div className="mx-auto flex h-14 max-w-[1400px] items-center justify-between px-6 lg:px-10">
+        <div className="flex items-center gap-3">
+          <span className="font-display text-[15px] font-bold tracking-tight">
+            EY<span className="text-lime">FI</span>
+          </span>
+          <span className="h-3.5 w-px bg-surface-border" />
+          <span className="text-[13px] text-muted">Challenge Leaderboard</span>
+          <span className="hidden rounded-full border border-surface-border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted sm:inline">
+            Wave 01
+          </span>
         </div>
-
-        <div>
-          <h1 className="font-display text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-4xl md:text-5xl">
-            Who&apos;s earning the most, <span className="text-lime">right now.</span>
-          </h1>
-          <p className="mt-2 max-w-xl text-sm text-muted sm:text-base">
-            30 days. Real hustle, real income. Every rupee earned by every student, ranked live.
-          </p>
+        <div className="w-56 sm:w-72">
+          <LiveTicker event={event} tick={tick} connected={connected} compact />
         </div>
+      </div>
 
-        <div className="flex flex-wrap gap-3">
-          <StatChip label="Total earned" value={`₹${(totalEarned / 100000).toFixed(2)}L`} accent="lime" />
-          <StatChip label="Active earners" value={String(activeEarners)} accent="orange" />
-          <StatChip label="Prize pool" value="₹2,00,000+" accent="lime" />
+      <div className="mx-auto max-w-[1400px] px-6 pb-8 pt-10 lg:px-10 lg:pt-14">
+        <p className="text-[13px] font-medium tracking-wide text-lime">Live rankings</p>
+        <h1 className="mt-2 max-w-2xl font-display text-[2.1rem] font-semibold leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">
+          Who&apos;s earning the most, right now.
+        </h1>
+        <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-muted">
+          30 days. Real hustle, real income. Every rupee earned by every student, ranked live.
+        </p>
+
+        <div className="glass mt-8 grid grid-cols-3 divide-x divide-surface-border rounded-2xl">
+          <StatCell label="Total earned" value={`₹${(totalEarned / 100000).toFixed(2)}L`} />
+          <StatCell label="Active earners" value={String(activeEarners)} />
+          <StatCell label="Prize pool" value="₹2,00,000+" accent="orange" />
         </div>
       </div>
     </header>
   );
 }
 
-function StatChip({ label, value, accent }: { label: string; value: string; accent: "lime" | "orange" }) {
+function StatCell({
+  label,
+  value,
+  accent = "lime",
+}: {
+  label: string;
+  value: string;
+  accent?: "lime" | "orange";
+}) {
   return (
-    <div className="rounded-2xl border border-surface-border bg-surface px-4 py-2.5">
+    <div className="flex flex-col gap-1 px-4 py-3.5 sm:px-6 sm:py-4">
       <p className="text-[10px] uppercase tracking-wider text-muted">{label}</p>
-      <p className={`font-mono text-lg font-bold ${accent === "lime" ? "text-lime" : "text-orange"}`}>
+      <p
+        className={`font-mono text-base font-semibold tabular-nums sm:text-lg ${
+          accent === "lime" ? "text-lime" : "text-orange"
+        }`}
+      >
         {value}
       </p>
     </div>

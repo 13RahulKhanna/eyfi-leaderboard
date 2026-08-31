@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
-  subsets: ["latin"],
-  weight: ["700", "800"],
-});
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -17,7 +11,7 @@ const spaceGrotesk = Space_Grotesk({
 const ticker = JetBrains_Mono({
   variable: "--font-ticker",
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -31,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${bricolage.variable} ${spaceGrotesk.variable} ${ticker.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${ticker.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">{children}</body>
     </html>

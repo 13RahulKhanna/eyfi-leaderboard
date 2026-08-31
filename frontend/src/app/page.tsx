@@ -6,11 +6,14 @@ import { Header } from "@/components/Header";
 import { FilterBar } from "@/components/FilterBar";
 import { Podium } from "@/components/Podium";
 import { LeaderboardRow } from "@/components/LeaderboardRow";
+import { ChallengeProgress } from "@/components/ChallengeProgress";
+import { CategoryLeaders } from "@/components/CategoryLeaders";
+import { LiveActivityFeed } from "@/components/LiveActivityFeed";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import type { Category, Range } from "@/lib/types";
 
 export default function Page() {
-  const { ranges, lastEvent, tick, connected, loading } = useLeaderboard();
+  const { ranges, lastEvent, eventLog, tick, connected, loading } = useLeaderboard();
   const [range, setRange] = useState<Range>("week");
   const [category, setCategory] = useState<Category | null>(null);
   const [search, setSearch] = useState("");
@@ -45,38 +48,42 @@ export default function Page() {
         activeEarners={ranges?.all.length ?? 0}
       />
 
-      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 pb-16 pt-6 sm:px-6">
+      <main className="mx-auto w-full max-w-[1400px] flex-1 px-6 pb-20 lg:px-10">
         {loading ? (
           <LoadingState />
         ) : (
-          <>
-            {showPodium && (
-              <section className="pb-2">
-                <Podium entries={filtered} />
-              </section>
-            )}
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
+            <div className="flex flex-col gap-6">
+              {showPodium && <Podium entries={filtered} />}
 
-            <FilterBar
-              range={range}
-              onRangeChange={setRange}
-              category={category}
-              onCategoryChange={setCategory}
-              search={search}
-              onSearchChange={setSearch}
-            />
+              <FilterBar
+                range={range}
+                onRangeChange={setRange}
+                category={category}
+                onCategoryChange={setCategory}
+                search={search}
+                onSearchChange={setSearch}
+              />
 
-            <LayoutGroup>
-              <section className="flex flex-col gap-2">
-                {listEntries.length === 0 ? (
-                  <p className="py-12 text-center text-sm text-muted">
-                    No one matches that search yet — be the first.
-                  </p>
-                ) : (
-                  listEntries.map((entry) => <LeaderboardRow key={entry.id} entry={entry} />)
-                )}
-              </section>
-            </LayoutGroup>
-          </>
+              <LayoutGroup>
+                <section className="flex flex-col gap-2">
+                  {listEntries.length === 0 ? (
+                    <p className="py-12 text-center text-sm text-muted">
+                      No one matches that search yet — be the first.
+                    </p>
+                  ) : (
+                    listEntries.map((entry) => <LeaderboardRow key={entry.id} entry={entry} />)
+                  )}
+                </section>
+              </LayoutGroup>
+            </div>
+
+            <aside className="flex flex-col gap-4 lg:sticky lg:top-6">
+              <ChallengeProgress />
+              <LiveActivityFeed events={eventLog} />
+              <CategoryLeaders entries={ranges?.all ?? []} />
+            </aside>
+          </div>
         )}
       </main>
 
@@ -89,16 +96,29 @@ export default function Page() {
 
 function LoadingState() {
   return (
-    <div className="flex flex-col gap-2 pt-4">
-      {Array.from({ length: 8 }).map((_, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0.4 }}
-          animate={{ opacity: [0.4, 0.8, 0.4] }}
-          transition={{ duration: 1.4, repeat: Infinity, delay: i * 0.05 }}
-          className="h-16 rounded-xl border border-surface-border bg-surface"
-        />
-      ))}
+    <div className="grid grid-cols-1 gap-6 pt-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="flex flex-col gap-2">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0.4 }}
+            animate={{ opacity: [0.4, 0.8, 0.4] }}
+            transition={{ duration: 1.4, repeat: Infinity, delay: i * 0.05 }}
+            className="h-16 rounded-xl border border-surface-border bg-surface"
+          />
+        ))}
+      </div>
+      <div className="hidden flex-col gap-4 lg:flex">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0.4 }}
+            animate={{ opacity: [0.4, 0.8, 0.4] }}
+            transition={{ duration: 1.4, repeat: Infinity, delay: i * 0.08 }}
+            className="h-40 rounded-2xl border border-surface-border bg-surface"
+          />
+        ))}
+      </div>
     </div>
   );
 }
