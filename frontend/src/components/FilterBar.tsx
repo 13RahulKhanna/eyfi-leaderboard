@@ -30,7 +30,7 @@ export function FilterBar({
             {range === r.value && (
               <motion.span
                 layoutId="range-pill"
-                className="absolute inset-0 -z-10 rounded-full bg-lime"
+                className="glossy absolute inset-0 -z-10 rounded-full bg-lime shadow-[0_2px_12px_-2px_rgba(196,246,46,0.5)]"
                 transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
               />
             )}
@@ -45,7 +45,7 @@ export function FilterBar({
             onClick={() => onCategoryChange(null)}
             className={`shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
               category === null
-                ? "border-orange bg-orange/15 text-orange"
+                ? "glossy border-orange bg-orange/15 text-orange shadow-[0_2px_10px_-4px_rgba(255,90,31,0.5)]"
                 : "border-surface-border text-muted hover:border-surface-border/80"
             }`}
           >
@@ -57,7 +57,7 @@ export function FilterBar({
               onClick={() => onCategoryChange(category === c ? null : c)}
               className={`shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
                 category === c
-                  ? "border-orange bg-orange/15 text-orange"
+                  ? "glossy border-orange bg-orange/15 text-orange shadow-[0_2px_10px_-4px_rgba(255,90,31,0.5)]"
                   : "border-surface-border text-muted hover:border-surface-border/80"
               }`}
             >

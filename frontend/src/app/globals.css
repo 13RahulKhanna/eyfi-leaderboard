@@ -81,3 +81,53 @@ body::after {
   backdrop-filter: blur(20px);
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
 }
+
+/* Glossy top highlight — a single reusable "premium sheen" for pills, chips and cards. */
+.glossy {
+  position: relative;
+  isolation: isolate;
+}
+.glossy::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0) 55%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Animated diagonal shimmer sweep, used on medals and other "look at me" surfaces. */
+@keyframes shimmer-sweep {
+  0% { background-position: -160% 0; }
+  60%, 100% { background-position: 220% 0; }
+}
+.shine-sweep {
+  position: relative;
+  overflow: hidden;
+}
+.shine-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.55) 48%, transparent 62%);
+  background-size: 220% 100%;
+  animation: shimmer-sweep 3.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.medal-gold {
+  background: linear-gradient(135deg, #fff6d8 0%, #f3d67a 24%, #caa53f 52%, #8a6a1d 76%, #f6dd8e 100%);
+  color: #3b2a05;
+  box-shadow: 0 0 22px -6px rgba(243, 214, 122, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+.medal-silver {
+  background: linear-gradient(135deg, #ffffff 0%, #e4e4e4 24%, #a8a8a8 52%, #6e6e6e 76%, #eaeaea 100%);
+  color: #232323;
+  box-shadow: 0 0 18px -6px rgba(220, 220, 220, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+.medal-bronze {
+  background: linear-gradient(135deg, #ffe1bd 0%, #e3a765 24%, #a8632a 52%, #6b3c14 76%, #f0b47c 100%);
+  color: #2c1704;
+  box-shadow: 0 0 18px -6px rgba(200, 140, 80, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.55);
+}

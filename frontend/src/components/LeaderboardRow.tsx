@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Avatar } from "./Avatar";
 import { CategoryTag } from "./CategoryTag";
 import { RankDelta } from "./RankDelta";
+import { RankMedal } from "./RankMedal";
 import { Sparkline } from "./Sparkline";
 import { useCountUp } from "@/hooks/useCountUp";
 import { formatInr } from "@/lib/format";
@@ -25,7 +26,13 @@ export function LeaderboardRow({ entry, highlight }: { entry: LeaderboardEntry; 
           : "border-surface-border bg-surface hover:border-surface-border/80 hover:bg-surface-raised/60"
       } transition-colors`}
     >
-      <span className="text-center font-mono text-sm text-muted tabular-nums">{entry.rank}</span>
+      <div className="flex justify-center">
+        {entry.rank <= 3 ? (
+          <RankMedal rank={entry.rank} size={26} />
+        ) : (
+          <span className="font-mono text-sm text-muted tabular-nums">{entry.rank}</span>
+        )}
+      </div>
 
       <div className="flex min-w-0 items-center gap-3">
         <Avatar name={entry.name} size={36} />
@@ -34,7 +41,9 @@ export function LeaderboardRow({ entry, highlight }: { entry: LeaderboardEntry; 
           <p className="truncate text-xs text-muted">
             {entry.college}
             {entry.streakDays >= 3 && (
-              <span className="ml-1.5 text-orange">🔥{entry.streakDays}</span>
+              <span className="ml-1.5 text-orange drop-shadow-[0_0_6px_rgba(255,90,31,0.55)]">
+                🔥{entry.streakDays}
+              </span>
             )}
           </p>
         </div>

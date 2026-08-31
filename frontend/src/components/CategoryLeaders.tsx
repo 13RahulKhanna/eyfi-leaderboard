@@ -25,7 +25,12 @@ export function CategoryLeaders({ entries }: { entries: LeaderboardEntry[] }) {
               <span className="text-[10px] font-medium uppercase tracking-wider text-muted">
                 {category}
               </span>
-              <Avatar name={leader!.name} size={22} />
+              <div className="relative">
+                <Avatar name={leader!.name} size={22} />
+                <span className="medal-gold shine-sweep absolute -bottom-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full text-[7px]">
+                  1
+                </span>
+              </div>
             </div>
             <div>
               <p className="truncate text-[12.5px] font-medium">{leader!.name.split(" ")[0]}</p>
