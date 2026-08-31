@@ -5,6 +5,11 @@ design assignment. Ranks student participants by income earned during the 30-day
 with a top-3 podium, live earnings ticker, category/search filters, and real-time re-ranking
 over WebSockets.
 
+## Live
+
+- App: https://frontend-production-2708.up.railway.app
+- API: https://backend-production-6a8dd.up.railway.app/api/health
+
 ## Stack
 
 - **frontend/** — Next.js 16 (App Router, React 19, TypeScript, Tailwind CSS v4), Framer Motion
