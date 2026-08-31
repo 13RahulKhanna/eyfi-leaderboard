@@ -8,7 +8,7 @@ import {
 import type { Server, Socket } from 'socket.io';
 import { LeaderboardService } from './leaderboard.service.js';
 
-const TICK_INTERVAL_MS = 4500;
+const TICK_INTERVAL_MS = 6000;
 
 @WebSocketGateway({
   cors: { origin: process.env.FRONTEND_ORIGIN ?? '*' },

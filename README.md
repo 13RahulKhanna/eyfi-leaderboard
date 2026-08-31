@@ -68,7 +68,7 @@ The frontend expects `NEXT_PUBLIC_API_URL` to point at the backend (defaults to
 - `GET /api/leaderboard?range=week|month|all&category=&search=` — ranked entries for a range,
   optionally filtered.
 - `GET /api/health` — health check (used by Railway).
-- WebSocket, default namespace, event `leaderboard:update` — pushed every ~4.5s with fresh
+- WebSocket, default namespace, event `leaderboard:update` — pushed every ~6s with fresh
   rankings for all three ranges plus the earning event that triggered the change.
 
 ## Deploying (GitHub + Railway)
