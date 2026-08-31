@@ -31,6 +31,17 @@ html {
   background: var(--background);
 }
 
+/* Tailwind's preflight resets buttons to cursor: default — bring back the hand
+   pointer on anything actually clickable. */
+button:not(:disabled),
+[role="button"],
+a,
+input[type="checkbox"],
+input[type="radio"],
+select {
+  cursor: pointer;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
